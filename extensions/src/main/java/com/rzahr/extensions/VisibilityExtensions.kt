@@ -5,7 +5,7 @@ import android.view.View
 /**
  * show or hide a view
  */
-fun View?.toggle() {
+fun View?.toggleView() {
 
     if (this?.visibility == View.VISIBLE) this.visibility = View.GONE
 
@@ -15,7 +15,7 @@ fun View?.toggle() {
 /**
  * sets view visibility to gone
  */
-fun View?.hide() {
+fun View?.hideView() {
 
     this?.visibility = View.GONE
 }
@@ -23,7 +23,7 @@ fun View?.hide() {
 /**
  * sets view visibility to invisible
  */
-fun View?.invisible() {
+fun View?.invisibleView() {
 
     this?.visibility = View.INVISIBLE
 }
@@ -32,7 +32,7 @@ fun View?.invisible() {
  * returns true if the view is visible
  * @return boolean value representing if the view is visible or not
  */
-fun View?.show(): Boolean {
+fun View?.showView(): Boolean {
 
     return this?.visibility == View.VISIBLE
 }
