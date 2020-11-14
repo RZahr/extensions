@@ -34,7 +34,7 @@ fun View?.invisibleView() {
  */
 fun View?.showView() {
 
-    this?.visibility == View.VISIBLE
+    this?.visibility = View.VISIBLE
 }
 
 fun View?.isVisible(): Boolean {
