@@ -32,7 +32,12 @@ fun View?.invisibleView() {
  * returns true if the view is visible
  * @return boolean value representing if the view is visible or not
  */
-fun View?.showView(): Boolean {
+fun View?.showView() {
+
+    this?.visibility == View.VISIBLE
+}
+
+fun View?.isVisible(): Boolean {
 
     return this?.visibility == View.VISIBLE
 }
