@@ -30,7 +30,6 @@ fun View?.invisibleView() {
 
 /**
  * returns true if the view is visible
- * @return boolean value representing if the view is visible or not
  */
 fun View?.showView() {
 
