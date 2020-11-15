@@ -2,7 +2,7 @@ package com.rzahr.extensions
 
 import android.view.View
 
-const val MIN_GUARD_INTERVAL = 800
+var MIN_GUARD_INTERVAL = 500
 private var lastEventTime = System.currentTimeMillis()
 private var initialized = false
 
