@@ -8,7 +8,7 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
 
-fun Date?.isDateWithinWeek(): Boolean {
+fun Date?.isWithinWeek(): Boolean {
 
     val calendar = Calendar.getInstance()
     @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
@@ -18,7 +18,7 @@ fun Date?.isDateWithinWeek(): Boolean {
     return calendar.get(Calendar.WEEK_OF_MONTH) == calendar2.get(Calendar.WEEK_OF_MONTH)
 }
 
-fun Date?.isDateWithinMonth(): Boolean {
+fun Date?.isWithinMonth(): Boolean {
 
     val calendar = Calendar.getInstance()
     @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
@@ -31,11 +31,10 @@ fun Date?.isDateWithinMonth(): Boolean {
 const val DASHED_FORMAT = "yyyy-MM-dd HH:mm:ss"
 const val SLASHED_FORMAT = "dd/MM/yyyy hh:mm:ss a"
 
-
-fun String.convertToDate(format: String = DASHED_FORMAT): Date? = SimpleDateFormat(format, Locale.ENGLISH).parse(this)
+fun String.toDate(format: String = DASHED_FORMAT): Date? = SimpleDateFormat(format, Locale.ENGLISH).parse(this)
 
 @TargetApi(Build.VERSION_CODES.O)
-fun String.convertToLocalDate(format: String = DASHED_FORMAT): LocalDate {
+fun String.toLocalDate(format: String = DASHED_FORMAT): LocalDate {
     val formatter =   DateTimeFormatter.ofPattern(format, Locale.ENGLISH)
     return LocalDate.parse(this, formatter)
 }
@@ -45,7 +44,7 @@ fun String.convertToLocalDate(format: String = DASHED_FORMAT): LocalDate {
  * @param format the format
  * @return a date string
  */
-fun Date.getDateAsString(format: String = DASHED_FORMAT): String {
+fun Date.asDateString(format: String = DASHED_FORMAT): String {
 
     val calendar = Calendar.getInstance()
     calendar.time = this
@@ -74,7 +73,7 @@ fun getCurrentDate(english: Boolean = true, format: String = DASHED_FORMAT): Str
  * @param timeZone the timezone
  * @return date string
  */
-fun Long.getDateAsString(format: String = SLASHED_FORMAT, timeZone: TimeZone? = null): String {
+fun Long.asDateString(format: String = SLASHED_FORMAT, timeZone: TimeZone? = null): String {
     val simpleDateFormat = SimpleDateFormat(format, Locale.ENGLISH)
     if (timeZone != null) simpleDateFormat.timeZone = timeZone
     return simpleDateFormat.format(Date(this).time)
