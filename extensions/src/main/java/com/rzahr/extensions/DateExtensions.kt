@@ -7,6 +7,17 @@ import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
+import java.util.concurrent.TimeUnit
+
+fun Date?.isWithinXDays(): Long {
+
+    val calendar = Calendar.getInstance()
+    @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+    calendar.time = this
+    val calendar2 = Calendar.getInstance()
+    calendar2.time = Date()
+    return TimeUnit.DAYS.convert(calendar2.time.time - calendar.time.time, TimeUnit.MILLISECONDS)
+}
 
 fun Date?.isWithinWeek(): Boolean {
 
@@ -31,7 +42,9 @@ fun Date?.isWithinMonth(): Boolean {
 const val DASHED_FORMAT = "yyyy-MM-dd HH:mm:ss"
 const val SLASHED_FORMAT = "dd/MM/yyyy hh:mm:ss a"
 
-fun String.toDate(format: String = DASHED_FORMAT): Date? = SimpleDateFormat(format, Locale.ENGLISH).parse(this)
+fun String.toDate(format: String = DASHED_FORMAT): Date? = SimpleDateFormat(format, Locale.ENGLISH).parse(
+    this
+)
 
 @TargetApi(Build.VERSION_CODES.O)
 fun String.toLocalDate(format: String = DASHED_FORMAT): LocalDate {
