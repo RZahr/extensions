@@ -24,7 +24,7 @@ object Security {
         return EncryptedData(Base64.encodeToString(map["encrypted"], Base64.NO_WRAP), Base64.encodeToString(map["salt"], Base64.NO_WRAP), Base64.encodeToString(map["iv"], Base64.NO_WRAP))
     }
 
-    fun String.decrypt(password: CharArray, salt: String, iv: String): String? {
+    fun String.decrypt(password: CharArray, salt: String?, iv: String?): String? {
         return decrypt(Base64.decode(salt, Base64.NO_WRAP), Base64.decode(iv, Base64.NO_WRAP),
             Base64.decode(this, Base64.NO_WRAP), password)?.let { String(it, Charsets.UTF_8) }
     }
