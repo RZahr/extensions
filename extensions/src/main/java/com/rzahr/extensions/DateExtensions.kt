@@ -16,7 +16,7 @@ fun Date?.isWithinXDays(days: Long): Boolean {
     calendar.time = this
     val calendar2 = Calendar.getInstance()
     calendar2.time = Date()
-    return TimeUnit.DAYS.convert(calendar2.time.time - calendar.time.time, TimeUnit.MILLISECONDS) == days
+    return TimeUnit.DAYS.convert(calendar2.time.time - calendar.time.time, TimeUnit.MILLISECONDS) <= days
 }
 
 fun Date?.isWithinWeek(): Boolean {
