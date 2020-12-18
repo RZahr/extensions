@@ -11,6 +11,7 @@ import java.util.concurrent.TimeUnit
 
 fun Date?.isWithinXDays(days: Long): Boolean {
 
+    if (this == null) return false
     val calendar = Calendar.getInstance()
     @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
     calendar.time = this
@@ -21,6 +22,7 @@ fun Date?.isWithinXDays(days: Long): Boolean {
 
 fun Date?.isWithinWeek(): Boolean {
 
+    if (this == null) return false
     val calendar = Calendar.getInstance()
     @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
     calendar.time = this
@@ -31,6 +33,7 @@ fun Date?.isWithinWeek(): Boolean {
 
 fun Date?.isWithinMonth(): Boolean {
 
+    if (this == null) return false
     val calendar = Calendar.getInstance()
     @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
     calendar.time = this
