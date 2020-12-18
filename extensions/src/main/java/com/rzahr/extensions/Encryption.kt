@@ -12,10 +12,10 @@ import javax.crypto.spec.SecretKeySpec
 
 object Security {
 
-   /* val chars = charArrayOf('A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A','A', 'A', 'A', 'A', 'A', 'A', 'A','A', 'A', 'A', 'A', 'A', 'A', 'A'
-                            'A', 'A', 'A', 'A', 'A', 'A', 'A','A', 'A', 'A', 'A', 'A', 'A', 'A','A', 'A', 'A', 'A', 'A', 'A', 'A','A', 'A', 'A', 'A', 'A', 'A', 'A'
-                            'A', 'A', 'A', 'A', 'A', 'A', 'A','A', 'A', 'A', 'A', 'A', 'A', 'A','A', 'A', 'A', 'A', 'A', 'A', 'A','A', 'A', 'A', 'A', 'A', 'A', 'A'
-                            'A', 'A', 'A', 'A', 'A', 'A', 'A')*/
+    /* val chars = charArrayOf('A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A','A', 'A', 'A', 'A', 'A', 'A', 'A','A', 'A', 'A', 'A', 'A', 'A', 'A'
+                             'A', 'A', 'A', 'A', 'A', 'A', 'A','A', 'A', 'A', 'A', 'A', 'A', 'A','A', 'A', 'A', 'A', 'A', 'A', 'A','A', 'A', 'A', 'A', 'A', 'A', 'A'
+                             'A', 'A', 'A', 'A', 'A', 'A', 'A','A', 'A', 'A', 'A', 'A', 'A', 'A','A', 'A', 'A', 'A', 'A', 'A', 'A','A', 'A', 'A', 'A', 'A', 'A', 'A'
+                             'A', 'A', 'A', 'A', 'A', 'A', 'A')*/
 
     data class EncryptedData(val text: String?, val salt: String?, val iv: String?)
 
@@ -29,16 +29,17 @@ object Security {
             Base64.decode(this, Base64.NO_WRAP), password)?.let { String(it, Charsets.UTF_8) }
     }
 
-    private fun encrypt(dataToEncrypt: ByteArray, password: CharArray): HashMap<String, ByteArray> {
+    private fun encrypt(dataToEncrypt: ByteArray, password: CharArray, saltByteArray: ByteArray? = null, ivByteArray: ByteArray? = null): HashMap<String, ByteArray> {
         val map = HashMap<String, ByteArray>()
 
         try {
             // 1
-            //Random salt for next step
-            val random = SecureRandom()
-            val salt = ByteArray(256)
-            random.nextBytes(salt)
-
+            //Random salt for next step unless explicitly specified
+            var salt: ByteArray? = saltByteArray
+            if (salt == null) {
+                salt = ByteArray(256)
+                SecureRandom().nextBytes(salt)
+            }
             // 2
             //PBKDF2 - derive the key from the password, don't use passwords directly
             val pbKeySpec = PBEKeySpec(password, salt, 1324, 256)
@@ -47,10 +48,12 @@ object Security {
             val keySpec = SecretKeySpec(keyBytes, "AES")
 
             // 3
-            //Create initialization vector for AES
-            val ivRandom = SecureRandom() //not caching previous seeded instance of SecureRandom
-            val iv = ByteArray(16)
-            ivRandom.nextBytes(iv)
+            //Create initialization vector for AES unless explicitly specified
+            var iv: ByteArray? = ivByteArray
+            if (iv == null) {
+                iv = ByteArray(16)
+                SecureRandom().nextBytes(iv)
+            }
             val ivSpec = IvParameterSpec(iv)
 
             // 4
