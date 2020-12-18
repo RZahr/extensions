@@ -19,8 +19,8 @@ object Security {
 
     data class EncryptedData(val text: String?, val salt: String?, val iv: String?)
 
-    fun String.encrypt(password: CharArray): EncryptedData {
-        val map = encrypt(this.toByteArray(Charsets.UTF_8), password)
+    fun String.encrypt(password: CharArray, saltByteArray: ByteArray? = null, ivByteArray: ByteArray? = null): EncryptedData {
+        val map = encrypt(this.toByteArray(Charsets.UTF_8), password, saltByteArray, ivByteArray)
         return EncryptedData(Base64.encodeToString(map["encrypted"], Base64.NO_WRAP), Base64.encodeToString(map["salt"], Base64.NO_WRAP), Base64.encodeToString(map["iv"], Base64.NO_WRAP))
     }
 
