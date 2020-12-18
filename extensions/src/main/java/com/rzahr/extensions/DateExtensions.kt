@@ -9,14 +9,14 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-fun Date?.isWithinXDays(): Long {
+fun Date?.isWithinXDays(days: Long): Boolean {
 
     val calendar = Calendar.getInstance()
     @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
     calendar.time = this
     val calendar2 = Calendar.getInstance()
     calendar2.time = Date()
-    return TimeUnit.DAYS.convert(calendar2.time.time - calendar.time.time, TimeUnit.MILLISECONDS)
+    return TimeUnit.DAYS.convert(calendar2.time.time - calendar.time.time, TimeUnit.MILLISECONDS) == days
 }
 
 fun Date?.isWithinWeek(): Boolean {
