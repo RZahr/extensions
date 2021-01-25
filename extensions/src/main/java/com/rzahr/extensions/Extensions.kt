@@ -49,4 +49,4 @@ fun Class<*>.isMyServiceRunning(context: Context): Boolean {
     return false
 }
 
-fun Cursor.rzVal(columnName: String) = if (this.getColumnIndex(columnName) != -1) this.getString(this.getColumnIndex(columnName)) else null
+fun Cursor.valueOf(columnName: String) = if (this.getColumnIndex(columnName) != -1) this.getString(this.getColumnIndex(columnName)) else null
