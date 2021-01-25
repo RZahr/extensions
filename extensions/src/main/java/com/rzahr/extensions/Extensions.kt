@@ -1,10 +1,14 @@
 package com.rzahr.extensions
 
+import android.Manifest
+import android.annotation.SuppressLint
 import android.app.ActivityManager
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.database.Cursor
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.BatteryManager
 import android.os.Build
 import android.util.Log
@@ -74,4 +78,82 @@ fun getBatteryLevel(context: Context): Int {
 
         0
     }
+}
+
+/**
+ * gets if the device has wifi or 3g
+ * @return if the device is connected to a wifi or 3g
+ */
+@SuppressLint("MissingPermission")
+@Suppress("DEPRECATION")
+fun isOnline(context: Context): Boolean {
+
+    val connectivityManager = (context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager)
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+        val networkCapabilities = connectivityManager.activeNetwork ?: return false
+        val actNw = connectivityManager.getNetworkCapabilities(networkCapabilities) ?: return false
+        return when {
+            actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) || actNw.hasTransport(
+                NetworkCapabilities.TRANSPORT_ETHERNET)|| actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)-> true
+            else -> false
+        }
+    }
+    else try {
+        @Suppress("RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+        return if (connectivityManager.activeNetworkInfo == null) false else connectivityManager.activeNetworkInfo.isConnected
+    }catch (e: Exception) {
+        return true
+    }
+}
+
+/**
+ * gets if the application is backgrounded by the user
+ * @return if the application is in the background
+ */
+fun backgrounded(context: Context): Boolean {
+
+    var isInBackground = true
+    var tasksList: List<*>? = null
+    val activityManager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+
+    if (Build.VERSION.SDK_INT > 20) tasksList = activityManager.runningAppProcesses
+
+    else {
+        try {
+            @Suppress("DEPRECATION")
+            tasksList = activityManager.getRunningTasks(1)
+
+        } catch (ignored: Exception) {
+        }
+    }
+
+    if (tasksList != null && tasksList.isNotEmpty()) {
+
+        when {
+
+            Build.VERSION.SDK_INT > 22 -> {
+
+                for (processInfo in activityManager.runningAppProcesses) {
+
+                    if (processInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
+
+                        for (activeProcess in processInfo.pkgList) {
+
+                            if (activeProcess == context.packageName) isInBackground = false
+                        }
+                    }
+                }
+
+                return isInBackground
+            }
+
+            Build.VERSION.SDK_INT > 20 -> return activityManager.runningAppProcesses[0].processName != context.packageName
+
+            else -> @Suppress("DEPRECATION") return activityManager.getRunningTasks(1)[0].topActivity?.packageName != context.packageName
+        }
+    }
+
+    else return false
 }
