@@ -105,7 +105,7 @@ class LogWriter(private val context: Context, private val logFolderName: String,
         catch (ignored: Exception) { }
     }
 
-    fun errorLogging(msg: String, error: String, exception: Exception? = null, logErrorInFirebase: (exception: Exception?, extraMessage: String?) -> Unit = {_,_->}) {
+    fun errorLogging(error: String, exception: Exception? = null, logErrorInFirebase: (exception: Exception?, extraMessage: String?) -> Unit = {_,_->}) {
         var level = 4
         for (stack in Thread.currentThread().stackTrace) {
 
@@ -117,10 +117,10 @@ class LogWriter(private val context: Context, private val logFolderName: String,
         }
         val callingMethod = mLogWriterInternal.getCallerClass(level)
 
-        errorLogHelper(mErrorFileName, callingMethod, msg, error, exception, logErrorInFirebase)
+        errorLogHelper(mErrorFileName, callingMethod, error, exception, logErrorInFirebase)
     }
 
-    fun fatalErrorLogging(msg: String, error: String, exception: Exception? = null, logErrorInFirebase: (exception: Exception?, extraMessage: String?) -> Unit = {_,_->}) {
+    fun fatalErrorLogging(error: String, exception: Exception? = null, logErrorInFirebase: (exception: Exception?, extraMessage: String?) -> Unit = {_,_->}) {
         var level = 4
         for (stack in Thread.currentThread().stackTrace) {
 
@@ -132,10 +132,10 @@ class LogWriter(private val context: Context, private val logFolderName: String,
         }
         val callingMethod = mLogWriterInternal.getCallerClass(level)
 
-        errorLogHelper(mFatalErrorFileName, callingMethod, msg, error, exception, logErrorInFirebase)
+        errorLogHelper(mFatalErrorFileName, callingMethod, error, exception, logErrorInFirebase)
     }
 
-    fun connectionLogging(msg: String, error: String, exception: Exception? = null, logErrorInFirebase: (exception: Exception?, extraMessage: String?) -> Unit = {_,_->}) {
+    fun connectionLogging(error: String, exception: Exception? = null, logErrorInFirebase: (exception: Exception?, extraMessage: String?) -> Unit = {_,_->}) {
         var level = 4
         for (stack in Thread.currentThread().stackTrace) {
 
@@ -147,13 +147,13 @@ class LogWriter(private val context: Context, private val logFolderName: String,
         }
         val callingMethod = mLogWriterInternal.getCallerClass(level)
 
-        errorLogHelper(mConnectionErrorFileName, callingMethod, msg, error, exception, logErrorInFirebase)
+        errorLogHelper(mConnectionErrorFileName, callingMethod, error, exception, logErrorInFirebase)
     }
 
-    private fun errorLogHelper(fileName: String, callingMethod: Array<String>, msg: String, error: String, exception: Exception?, logErrorInFirebase: (exception: Exception?, extraMessage: String?) -> Unit = {_,_->}) {
+    private fun errorLogHelper(fileName: String, callingMethod: Array<String>, error: String, exception: Exception?, logErrorInFirebase: (exception: Exception?, extraMessage: String?) -> Unit = {_,_->}) {
         try {
-            mLogWriterInternal.logErrorHelper(callingMethod, msg, "${mExternalFilesDirectory.toString()}/$logFolderName/$fileName.txt", error, false)
-            logErrorInFirebase(exception, "Activity: " + callingMethod[1] + "         Func: " + callingMethod[2] + " Line No. " + callingMethod[0] + " Msg: $msg //**//Error: $error \n")
+            mLogWriterInternal.logErrorHelper(callingMethod, "${mExternalFilesDirectory.toString()}/$logFolderName/$fileName.txt", error, false)
+            logErrorInFirebase(exception, "Activity: " + callingMethod[1] + "         Func: " + callingMethod[2] + " Line No. " + callingMethod[0] + " Error: $error \n")
         }
 
         catch (ignored: Exception) { }
