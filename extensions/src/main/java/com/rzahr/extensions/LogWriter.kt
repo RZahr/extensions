@@ -8,18 +8,18 @@ import java.io.File
 * this class should be created in the applications class and used across app
 * */
 @Suppress("unused")
-class LogWriter(private val context: Context, private val logFolderName: String, private val supportFileLogging: Boolean) {
+class LogWriter(private val context: Context, private val logFolderName: String, supportFileLogging: Boolean) {
 
-    private lateinit var dateLog: String
-    private lateinit var mErrorFileName: String
-    private lateinit var mLogFileName: String
-    private lateinit var mSystemLogFileName: String
-    private lateinit var mFatalErrorFileName: String
-    private lateinit var mConnectionErrorFileName: String
+    private var dateLog: String
+    private var mErrorFileName: String
+    private var mLogFileName: String
+    private var mSystemLogFileName: String
+    private var mFatalErrorFileName: String
+    private var mConnectionErrorFileName: String
     private var mExternalFilesDirectory: File? = null
     private var mLogWriterInternal: LogWriterInternal = LogWriterInternal(supportFileLogging)
 
-    fun init() {
+    init {
 
         if (supportFileLogging) {
             try {
