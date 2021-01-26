@@ -15,6 +15,29 @@ import java.util.*
 import kotlin.math.roundToInt
 
 /**
+ * gets if the device is plugged in or not
+ * @return boolean value representing if the device is plugged in or not
+ */
+fun isPluggedIn(context: Context): Boolean {
+
+    try {
+
+        val plugged = context.registerReceiver(null, IntentFilter(Intent.ACTION_BATTERY_CHANGED))?.getIntExtra(
+            BatteryManager.EXTRA_PLUGGED, -1) ?: -1
+
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) plugged == BatteryManager.BATTERY_PLUGGED_AC || plugged == BatteryManager.BATTERY_PLUGGED_USB || plugged == BatteryManager.BATTERY_PLUGGED_WIRELESS
+        else plugged == BatteryManager.BATTERY_PLUGGED_AC || plugged == BatteryManager.BATTERY_PLUGGED_USB
+    }
+
+    catch (exc: Exception) {
+
+        Log.e("Error in isPluggedIn:", exc.toString())
+    }
+
+    return false
+}
+
+/**
  * gets the device name
  * @return the device name
  */
