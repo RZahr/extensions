@@ -1,6 +1,5 @@
 package com.rzahr.extensions
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.app.ActivityManager
 import android.content.Context
