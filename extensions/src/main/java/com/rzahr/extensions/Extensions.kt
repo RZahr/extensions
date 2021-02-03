@@ -14,6 +14,21 @@ import android.util.Log
 import java.util.*
 import kotlin.math.roundToInt
 
+
+/**
+ * checks the current application version name
+ * @return the version name or empty string
+ */
+fun getVersionName(context: Context): String {
+    return try {
+        val version = context
+            .packageManager.getPackageInfo(context.packageName, 0).versionName
+        version
+    } catch (e: Exception) {
+        ""
+    }
+}
+
 /**
  * gets if the device is plugged in or not
  * @return boolean value representing if the device is plugged in or not
