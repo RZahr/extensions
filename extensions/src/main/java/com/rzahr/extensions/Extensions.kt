@@ -1,6 +1,7 @@
 package com.rzahr.extensions
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.ActivityManager
 import android.content.Context
 import android.content.Intent
@@ -11,6 +12,8 @@ import android.net.NetworkCapabilities
 import android.os.BatteryManager
 import android.os.Build
 import android.util.Log
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import java.util.*
 import kotlin.math.roundToInt
 
@@ -27,6 +30,24 @@ fun getVersionName(context: Context): String {
     } catch (e: Exception) {
         ""
     }
+}
+
+/**
+ * tool used to hide the keyboard from an activity
+ */
+fun Activity.hideKeyboard() {
+
+    if (currentFocus == null) View(this) else currentFocus?.let { hideKeyboard(it) }
+}
+
+/**
+ * hiding keyboard anywhere
+ * @param view: the view
+ */
+fun Context.hideKeyboard(view: View) {
+
+    val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+    inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
 }
 
 /**
