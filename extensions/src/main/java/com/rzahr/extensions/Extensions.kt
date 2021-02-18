@@ -6,6 +6,7 @@ import android.app.ActivityManager
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.res.Configuration
 import android.database.Cursor
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
@@ -34,6 +35,17 @@ fun getVersionName(context: Context): String {
     }
 }
 
+fun Activity.statusBarAdapt() {
+
+    try {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+            val rootView = this.window.decorView
+            if (this.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) rootView.systemUiVisibility = 0
+            else rootView.systemUiVisibility = rootView.systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        }
+    }catch (e: Exception) {}
+}
 
 /**
  * tool used to hide the keyboard from an activity
