@@ -9,11 +9,13 @@ import android.content.IntentFilter
 import android.database.Cursor
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.net.Uri
 import android.os.BatteryManager
 import android.os.Build
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import java.io.File
 import java.util.*
 import kotlin.math.roundToInt
 
@@ -31,6 +33,7 @@ fun getVersionName(context: Context): String {
         ""
     }
 }
+
 
 /**
  * tool used to hide the keyboard from an activity
