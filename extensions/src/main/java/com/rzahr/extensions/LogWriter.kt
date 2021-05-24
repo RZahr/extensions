@@ -24,12 +24,8 @@ class LogWriter(private val context: Context, private val logFolderName: String,
         if (supportFileLogging) {
             try {
                 val folder = File(getAppStorageDirectory().toString() + "/" + logFolderName)
-
                 if (!folder.exists()) folder.mkdir()
-                else Log.e("LogWriter", "Error in Creating Logs Directory")
-
             } catch (exc: Exception) {
-
                 Log.e("LogWriter", exc.toString())
             }
         }
@@ -65,87 +61,87 @@ class LogWriter(private val context: Context, private val logFolderName: String,
         catch (ignored: Exception) { }
     }
 
-    fun systemLogging(msg: String, logInFirebase: (message: String) -> Unit = {_->}) {
-        var level = 4
-        for (stack in Thread.currentThread().stackTrace) {
-
-            if (stack.className.contains(context.packageName, ignoreCase = true) && !stack.className.contains(this.javaClass.name, ignoreCase = true) && !stack.className.contains("GVBase", ignoreCase = true) && !stack.className.contains("GVFTDatabase", ignoreCase = true)) {
-
-                level = Thread.currentThread().stackTrace.indexOf(stack)
-                break
+    fun systemLogging(msg: String, className: String = "", functionName: String = "", lineNumber: Int = -1, logInFirebase: (message: String) -> Unit = {_->}) {
+        val callingMethod = if (functionName.isEmpty()) {
+            var level = 4
+            for (stack in Thread.currentThread().stackTrace) {
+                if (stack.className.contains(context.packageName, ignoreCase = true) && !stack.className.contains(this.javaClass.name, ignoreCase = true)) {
+                    level = Thread.currentThread().stackTrace.indexOf(stack)
+                    break
+                }
             }
-        }
-        val callingMethod = mLogWriterInternal.getCallerClass(level)
+            mLogWriterInternal.getCallerClass(level)
+        } else arrayOf(lineNumber.toString(), className, functionName)
 
         try {
             mLogWriterInternal.logHelper(callingMethod, msg, "${mExternalFilesDirectory.toString()}/$logFolderName/$mSystemLogFileName.txt", false)
-            logInFirebase("Activity: " + callingMethod[1] + "         Func: " + callingMethod[2] + " Line No. " + callingMethod[0] + " Msg: $msg\n")
+            logInFirebase("Class: " + callingMethod[1] + " <=> " + callingMethod[2] + "(" + callingMethod[0] + "): $msg\n")
         }
 
         catch (ignored: Exception) { }
     }
 
-    fun logging(msg: String, logInFirebase: (message: String) -> Unit = {_->}) {
-        var level = 4
-        for (stack in Thread.currentThread().stackTrace) {
-
-            if (stack.className.contains(context.packageName, ignoreCase = true) && !stack.className.contains(this.javaClass.name, ignoreCase = true) && !stack.className.contains("GVBase", ignoreCase = true) && !stack.className.contains("GVFTDatabase", ignoreCase = true)) {
-
-                level = Thread.currentThread().stackTrace.indexOf(stack)
-                break
+    fun logging(msg: String, className: String = "", functionName: String = "", lineNumber: Int = -1, logInFirebase: (message: String) -> Unit = {_->}) {
+        val callingMethod = if (functionName.isEmpty()) {
+            var level = 4
+            for (stack in Thread.currentThread().stackTrace) {
+                if (stack.className.contains(context.packageName, ignoreCase = true) && !stack.className.contains(this.javaClass.name, ignoreCase = true)) {
+                    level = Thread.currentThread().stackTrace.indexOf(stack)
+                    break
+                }
             }
-        }
-        val callingMethod = mLogWriterInternal.getCallerClass(level)
+            mLogWriterInternal.getCallerClass(level)
+        } else arrayOf(lineNumber.toString(), className, functionName)
 
         try {
             mLogWriterInternal.logHelper(callingMethod, msg, "${mExternalFilesDirectory.toString()}/$logFolderName/$mLogFileName.txt", false)
-            logInFirebase("Activity: " + callingMethod[1] + "         Func: " + callingMethod[2] + " Line No. " + callingMethod[0] + " Msg: $msg\n")
+            logInFirebase("Class: " + callingMethod[1] + " <=> " + callingMethod[2] + "(" + callingMethod[0] + "): $msg\n")
         }
 
         catch (ignored: Exception) { }
     }
 
-    fun errorLogging(error: String, exception: Exception? = null, logErrorInFirebase: (exception: Exception?, extraMessage: String?) -> Unit = {_,_->}) {
-        var level = 4
-        for (stack in Thread.currentThread().stackTrace) {
-
-            if (stack.className.contains(context.packageName, ignoreCase = true) && !stack.className.contains(this.javaClass.name, ignoreCase = true) && !stack.className.contains("GVBase", ignoreCase = true) && !stack.className.contains("GVFTDatabase", ignoreCase = true)) {
-
-                level = Thread.currentThread().stackTrace.indexOf(stack)
-                break
+    fun errorLogging(error: String, exception: Exception? = null, className: String = "", functionName: String = "", lineNumber: Int = -1, logErrorInFirebase: (exception: Exception?, extraMessage: String?) -> Unit = {_,_->}) {
+        val callingMethod = if (functionName.isEmpty()) {
+            var level = 4
+            for (stack in Thread.currentThread().stackTrace) {
+                if (stack.className.contains(context.packageName, ignoreCase = true) && !stack.className.contains(this.javaClass.name, ignoreCase = true)) {
+                    level = Thread.currentThread().stackTrace.indexOf(stack)
+                    break
+                }
             }
-        }
-        val callingMethod = mLogWriterInternal.getCallerClass(level)
+            mLogWriterInternal.getCallerClass(level)
+        } else arrayOf(lineNumber.toString(), className, functionName)
 
         errorLogHelper(mErrorFileName, callingMethod, error, exception, logErrorInFirebase)
     }
 
-    fun fatalErrorLogging(error: String, exception: Exception? = null, logErrorInFirebase: (exception: Exception?, extraMessage: String?) -> Unit = {_,_->}) {
-        var level = 4
-        for (stack in Thread.currentThread().stackTrace) {
-
-            if (stack.className.contains(context.packageName, ignoreCase = true) && !stack.className.contains(this.javaClass.name, ignoreCase = true) && !stack.className.contains("GVBase", ignoreCase = true) && !stack.className.contains("GVFTDatabase", ignoreCase = true)) {
-
-                level = Thread.currentThread().stackTrace.indexOf(stack)
-                break
+    fun fatalErrorLogging(error: String, exception: Exception? = null, className: String = "", functionName: String = "", lineNumber: Int = -1, logErrorInFirebase: (exception: Exception?, extraMessage: String?) -> Unit = {_,_->}) {
+        val callingMethod = if (functionName.isEmpty()) {
+            var level = 4
+            for (stack in Thread.currentThread().stackTrace) {
+                if (stack.className.contains(context.packageName, ignoreCase = true) && !stack.className.contains(this.javaClass.name, ignoreCase = true)) {
+                    level = Thread.currentThread().stackTrace.indexOf(stack)
+                    break
+                }
             }
-        }
-        val callingMethod = mLogWriterInternal.getCallerClass(level)
+            mLogWriterInternal.getCallerClass(level)
+        } else arrayOf(lineNumber.toString(), className, functionName)
 
         errorLogHelper(mFatalErrorFileName, callingMethod, error, exception, logErrorInFirebase)
     }
 
-    fun connectionLogging(error: String, exception: Exception? = null, logErrorInFirebase: (exception: Exception?, extraMessage: String?) -> Unit = {_,_->}) {
-        var level = 4
-        for (stack in Thread.currentThread().stackTrace) {
-
-            if (stack.className.contains(context.packageName, ignoreCase = true) && !stack.className.contains(this.javaClass.name, ignoreCase = true) && !stack.className.contains("GVBase", ignoreCase = true) && !stack.className.contains("GVFTDatabase", ignoreCase = true)) {
-
-                level = Thread.currentThread().stackTrace.indexOf(stack)
-                break
+    fun connectionLogging(error: String, exception: Exception? = null, className: String = "", functionName: String = "", lineNumber: Int = -1, logErrorInFirebase: (exception: Exception?, extraMessage: String?) -> Unit = {_,_->}) {
+        val callingMethod = if (functionName.isEmpty()) {
+            var level = 4
+            for (stack in Thread.currentThread().stackTrace) {
+                if (stack.className.contains(context.packageName, ignoreCase = true) && !stack.className.contains(this.javaClass.name, ignoreCase = true)) {
+                    level = Thread.currentThread().stackTrace.indexOf(stack)
+                    break
+                }
             }
-        }
-        val callingMethod = mLogWriterInternal.getCallerClass(level)
+            mLogWriterInternal.getCallerClass(level)
+        } else arrayOf(lineNumber.toString(), className, functionName)
 
         errorLogHelper(mConnectionErrorFileName, callingMethod, error, exception, logErrorInFirebase)
     }
@@ -153,7 +149,7 @@ class LogWriter(private val context: Context, private val logFolderName: String,
     private fun errorLogHelper(fileName: String, callingMethod: Array<String>, error: String, exception: Exception?, logErrorInFirebase: (exception: Exception?, extraMessage: String?) -> Unit = {_,_->}) {
         try {
             mLogWriterInternal.logErrorHelper(callingMethod, "${mExternalFilesDirectory.toString()}/$logFolderName/$fileName.txt", error, false)
-            logErrorInFirebase(exception, "Activity: " + callingMethod[1] + "         Func: " + callingMethod[2] + " Line No. " + callingMethod[0] + " Error: $error \n")
+            logErrorInFirebase(exception, "Class: " + callingMethod[1] + " <=> " + callingMethod[2] + "(" + callingMethod[0] + "): $error \n")
         }
 
         catch (ignored: Exception) { }

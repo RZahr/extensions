@@ -29,14 +29,14 @@ internal class LogWriterInternal(private val supportFileLogging: Boolean) {
 
     fun logErrorHelper(callingMethod: Array<String>, filePath: String, error: String, deleteFileIfExist: Boolean) {
 
-        Log.e(callingMethod[1] + " (" + callingMethod[0] + ")", "Func: " + callingMethod[2] + " Error: " + error)
-        if (supportFileLogging) appendContents(filePath, callingMethod[1] + "         Func: " + callingMethod[2] + " Line No. " + callingMethod[0] + " Error: " + error + " \n",true, deleteFileIfExist)
+        Log.e(callingMethod[1] + "(" + callingMethod[0] + ")", " <=> " + callingMethod[2] + ": " + error)
+        if (supportFileLogging) appendContents(filePath, callingMethod[1] + " <=> " + callingMethod[2] + "(" + callingMethod[0] + "): " + error + " \n",true, deleteFileIfExist)
     }
 
     fun logHelper(callingMethod: Array<String>, msg: String, filePath: String, deleteFileIfExist: Boolean) {
 
-        Log.w(callingMethod[1] + " (" + callingMethod[0] + ")", "Func: " + callingMethod[2] + " Msg: " + msg)
-        if (supportFileLogging) appendContents(filePath, callingMethod[1] + "         Func: " + callingMethod[2] + " Line No. " + callingMethod[0] + " Msg: " + msg + " \n",true, deleteFileIfExist)
+        Log.w(callingMethod[1] + "(" + callingMethod[0] + ")", " <=> " + callingMethod[2] + ": " + msg)
+        if (supportFileLogging) appendContents(filePath, callingMethod[1] + " <=> " + callingMethod[2] + "(" + callingMethod[0] + "): " + msg + " \n",true, deleteFileIfExist)
     }
 
     fun logToFileHelper(msg: String, filePath: String) {
